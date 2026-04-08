@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>DocuMind LM - Login/Register</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+    
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .animate-slideInLeft {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        .animate-slideInRight {
+            animation: slideInRight 0.6s ease-out;
+        }
+        
+        .animate-pulse-custom {
+            animation: pulse 2s infinite;
+        }
+        
+        .shimmer-effect {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background-size: 200px 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        .form-container {
+            transition: all 0.3s ease;
+        }
+        
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .form-container:hover {
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        }
+        
+        .input-field {
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .input-field:focus {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.05);
+        }
+        
+        .btn-primary {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark .btn-primary:hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+        }
+        
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(135deg, #000000, #333333);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .dark .tab-button.active {
+            background: linear-gradient(135deg, #ffffff, #cccccc);
+            color: black;
+        }
+        
+        .social-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dark .social-btn:hover {
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "secondary": "#ffffff",
+                        "background-light": "#ffffff",
+                        "background-dark": "#000000", 
+                        "text-light": "#000000",
+                        "text-dark": "#ffffff",
+                        "border-light": "#000000",
+                        "border-dark": "#ffffff",
+                        "card-light": "#ffffff",
+                        "card-dark": "#000000",
+                        "gray-light": "#f5f5f5",
+                        "gray-dark": "#1a1a1a",
+                        "accent": "#333333",
+                        "accent-dark": "#cccccc",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark transition-colors duration-500">
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark px-6 py-3 shrink-0 animate-slideInLeft">
+            <div class="flex items-center gap-3 text-text-light dark:text-text-dark">
+                <div class="size-6 text-primary dark:text-secondary transform hover:rotate-180 transition-transform duration-500">
+                    <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">DocuMind LM</h2>
+            </div>
+            <div class="flex gap-2">
+                <button class="flex items-center justify-center rounded-lg h-10 px-4 hover:bg-gray-light dark:hover:bg-gray-dark text-text-light dark:text-text-dark transition-all duration-200 hover:scale-105" onclick="window.location.href='/home'">
+                    <span class="material-symbols-outlined mr-2">home</span>
+                    <span class="text-sm font-medium">Back to Home</span>
+                </button>
+                <button class="flex items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-light dark:hover:bg-gray-dark text-accent dark:text-accent-dark transition-all duration-200 hover:scale-105" onclick="toggleDarkMode()">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-grow flex items-center justify-center p-6">
+            <div class="w-full max-w-md">
+                <!-- Logo Section -->
+                <div class="text-center mb-8 animate-fadeInUp">
+                    <div class="size-16 mx-auto mb-4 text-primary dark:text-secondary animate-pulse-custom">
+                        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold text-text-light dark:text-text-dark mb-2">Welcome to DocuMind LM</h1>
+                    <p class="text-accent dark:text-accent-dark">Intelligent document analysis powered by AI</p>
+                </div>
+
+                <!-- Form Container -->
+                <div class="form-container bg-card-light dark:bg-card-dark border border-border-light dark:border-border-dark rounded-xl p-8 shadow-lg animate-slideInRight" style="animation-delay: 0.3s;">
+                    <!-- Tab Buttons -->
+                    <div class="flex mb-6">
+                        <button class="tab-button flex-1 py-3 px-4 text-sm font-medium rounded-l-lg border border-border-light dark:border-border-dark active" id="login-tab" onclick="switchTab('login')">
+                            Login
+                        </button>
+                        <button class="tab-button flex-1 py-3 px-4 text-sm font-medium rounded-r-lg border border-border-light dark:border-border-dark border-l-0" id="register-tab" onclick="switchTab('register')">
+                            Register
+                        </button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <form id="login-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2">Email</label>
+                            <input type="email" id="login-email" class="input-field w-full px-4 py-3 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-primary dark:focus:border-secondary" placeholder="Enter your email" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2">Password</label>
+                            <div class="relative">
+                                <input type="password" id="login-password" class="input-field w-full px-4 py-3 pr-12 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-primary dark:focus:border-secondary" placeholder="Enter your password" required>
+                                <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-accent dark:text-accent-dark hover:text-text-light dark:hover:text-text-dark transition-colors" onclick="togglePassword('login-password')">
+                                    <span class="material-symbols-outlined">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-border-light dark:border-border-dark text-primary dark:text-secondary focus:ring-primary dark:focus:ring-secondary">
+                                <span class="ml-2 text-sm text-accent dark:text-accent-dark">Remember me</span>
+                            </label>
+                            <a href="#" class="text-sm text-primary dark:text-secondary hover:underline">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn-primary w-full py-3 px-4 bg-primary dark:bg-secondary text-secondary dark:text-primary rounded-lg font-medium hover:bg-accent dark:hover:bg-accent-dark">
+                            Sign In
+                        </button>
+                    </form>
+
+                    <!-- Register Form -->
+                    <form id="register-form" class="space-y-4 hidden">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2">First Name</label>
+                                <input type="text" id="register-firstname" class="input-field w-full px-4 py-3 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-primary dark:focus:border-secondary" placeholder="First name" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2">Last Name</label>
+                                <input type="text" id="register-lastname" class="input-field w-full px-4 py-3 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-primary dark:focus:border-secondary" placeholder="Last name" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2">Username</label>
+                            <input type="text" id="register-username" class="input-field w-full px-4 py-3 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-primary dark:focus:border-secondary" placeholder="Choose a username" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2">Email</label>
+                            <input type="email" id="register-email" class="input-field w-full px-4 py-3 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-primary dark:focus:border-secondary" placeholder="Enter your email" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2">Password</label>
+                            <div class="relative">
+                                <input type="password" id="register-password" class="input-field w-full px-4 py-3 pr-12 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-primary dark:focus:border-secondary" placeholder="Create a password" required>
+                                <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-accent dark:text-accent-dark hover:text-text-light dark:hover:text-text-dark transition-colors" onclick="togglePassword('register-password')">
+                                    <span class="material-symbols-outlined">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-text-light dark:text-text-dark mb-2">Confirm Password</label>
+                            <div class="relative">
+                                <input type="password" id="confirm-password" class="input-field w-full px-4 py-3 pr-12 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-primary dark:focus:border-secondary" placeholder="Confirm your password" required>
+                                <button type="button" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-accent dark:text-accent-dark hover:text-text-light dark:hover:text-text-dark transition-colors" onclick="togglePassword('confirm-password')">
+                                    <span class="material-symbols-outlined">visibility</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-border-light dark:border-border-dark text-primary dark:text-secondary focus:ring-primary dark:focus:ring-secondary" required>
+                                <span class="ml-2 text-sm text-accent dark:text-accent-dark">I agree to the <a href="#" class="text-primary dark:text-secondary hover:underline">Terms of Service</a> and <a href="#" class="text-primary dark:text-secondary hover:underline">Privacy Policy</a></span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary w-full py-3 px-4 bg-primary dark:bg-secondary text-secondary dark:text-primary rounded-lg font-medium hover:bg-accent dark:hover:bg-accent-dark">
+                            Create Account
+                        </button>
+                    </form>
+
+                    <!-- Divider -->
+                    <div class="my-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-border-light dark:border-border-dark"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-card-light dark:bg-card-dark text-accent dark:text-accent-dark">Or continue with</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Login -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <button class="social-btn flex items-center justify-center px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-gray-light dark:hover:bg-gray-dark transition-all" onclick="signInWithGoogle()">
+                            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Google
+                        </button>
+                        <button class="social-btn flex items-center justify-center px-4 py-2 border border-border-light dark:border-border-dark rounded-lg hover:bg-gray-light dark:hover:bg-gray-dark transition-all" onclick="signInWithFacebook()">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            Facebook
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Footer Text -->
+                <p class="text-center text-sm text-accent dark:text-accent-dark mt-6 animate-fadeInUp" style="animation-delay: 0.6s;">
+                    By signing in, you agree to our Terms of Service and Privacy Policy
+                </p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(tab) {
+            const loginTab = document.getElementById('login-tab');
+            const registerTab = document.getElementById('register-tab');
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            if (tab === 'login') {
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+            } else {
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                registerForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            }
+        }
+
+        // Password visibility toggle
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = field.nextElementSibling.querySelector('span');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                field.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+        }
+
+        // Form submission handlers
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in...';
+            
+            try {
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('authToken', data.token);
+                    alert('Login successful! Redirecting to home page...');
+                    setTimeout(() => {
+                        window.location.href = '/home';
+                    }, 1000);
+                } else {
+                    alert(data.detail || 'Login failed. Please check your credentials.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Sign In';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Login failed. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In';
+            }
+        });
+
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('register-firstname').value;
+            const lastName = document.getElementById('register-lastname').value;
+            const username = document.getElementById('register-username').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            // Validate password length
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters long!');
+                return;
+            }
+            
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating account...';
+            
+            try {
+                const response = await fetch('/api/v1/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        username, 
+                        email, 
+                        password,
+                        firstName,
+                        lastName
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('authToken', data.token);
+                    alert(`Registration successful! Welcome ${firstName}! Redirecting to home page...`);
+                    setTimeout(() => {
+                        window.location.href = '/home';
+                    }, 1000);
+                } else {
+                    alert(data.detail || 'Registration failed. Please try again.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create Account';
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('Registration failed. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
+            }
+        });
+
+        // Social login handlers (placeholders)
+        function signInWithGoogle() {
+            alert('Google sign-in coming soon!');
+        }
+
+        function signInWithFacebook() {
+            alert('Facebook sign-in coming soon!');
+        }
+
+        // Initialize dark mode from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark');
+            }
+
+            // Add shimmer effect to buttons on hover
+            const buttons = document.querySelectorAll('.btn-primary, .social-btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.classList.add('shimmer-effect');
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.classList.remove('shimmer-effect');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

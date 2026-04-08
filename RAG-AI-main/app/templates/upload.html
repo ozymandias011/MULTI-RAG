@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DocuMind LM - AI Document Analysis</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#000000",
+              "secondary": "#ffffff",
+              "background-light": "#ffffff",
+              "background-dark": "#000000", 
+              "text-light": "#000000",
+              "text-dark": "#ffffff",
+              "border-light": "#000000",
+              "border-dark": "#ffffff",
+              "card-light": "#ffffff",
+              "card-dark": "#000000",
+              "gray-light": "#f5f5f5",
+              "gray-dark": "#1a1a1a",
+              "accent": "#333333",
+              "accent-dark": "#cccccc",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: -200px 0;
+            }
+            100% {
+                background-position: calc(200px + 100%) 0;
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes progressFill {
+            from {
+                width: 0%;
+            }
+            to {
+                width: var(--progress-width);
+            }
+        }
+        
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+        
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes dragPulse {
+            0%, 100% {
+                border-color: currentColor;
+                background-color: transparent;
+            }
+            50% {
+                border-color: #000000;
+                background-color: rgba(0, 0, 0, 0.05);
+            }
+        }
+        
+        .dark @keyframes dragPulse {
+            0%, 100% {
+                border-color: currentColor;
+                background-color: transparent;
+            }
+            50% {
+                border-color: #ffffff;
+                background-color: rgba(255, 255, 255, 0.05);
+            }
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .animate-slideInLeft {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        .animate-slideInRight {
+            animation: slideInRight 0.6s ease-out;
+        }
+        
+        .animate-pulse-custom {
+            animation: pulse 2s infinite;
+        }
+        
+        .animate-bounce-custom {
+            animation: bounce 1.5s ease-in-out;
+        }
+        
+        .animate-rotate {
+            animation: rotate 2s linear infinite;
+        }
+        
+        .animate-scaleIn {
+            animation: scaleIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .animate-wiggle {
+            animation: wiggle 0.5s ease-in-out;
+        }
+        
+        .animate-floatUp {
+            animation: floatUp 0.7s ease-out;
+        }
+        
+        .shimmer-effect {
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+            background-size: 200px 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        .dark .shimmer-effect {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+        
+        .upload-card {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .upload-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dark .upload-card:hover {
+            box-shadow: 0 25px 50px rgba(255, 255, 255, 0.1);
+        }
+        
+        .upload-button {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .upload-button:hover::before {
+            left: 100%;
+        }
+        
+        .upload-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark .upload-button:hover {
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.2);
+        }
+        
+        .drag-zone {
+            transition: all 0.3s ease;
+        }
+        
+        .drag-zone.drag-over {
+            animation: dragPulse 1s infinite;
+            transform: scale(1.02);
+            border-width: 3px;
+        }
+        
+        .upload-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .upload-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        
+        .file-item {
+            transition: all 0.3s ease;
+        }
+        
+        .file-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .file-item:hover {
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.05);
+        }
+        
+        .header-button {
+            transition: all 0.3s ease;
+        }
+        
+        .header-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dark .header-button:hover {
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        .avatar-bounce {
+            animation: bounce 1.5s ease-in-out;
+        }
+        
+        .avatar-bounce:hover {
+            animation: wiggle 0.5s ease-in-out;
+        }
+        
+        .logo-spin {
+            transition: transform 0.5s ease;
+        }
+        
+        .logo-spin:hover {
+            transform: rotate(180deg) scale(1.1);
+        }
+        
+        .success-animation {
+            animation: scaleIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .cancel-button {
+            transition: all 0.2s ease;
+        }
+        
+        .cancel-button:hover {
+            transform: rotate(90deg) scale(1.1);
+            color: #ef4444;
+        }
+        
+        .dark .cancel-button:hover {
+            color: #f87171;
+        }
+</style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark transition-colors duration-500">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Header Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark px-4 sm:px-6 md:px-10 py-4 animate-slideInLeft">
+<div class="flex items-center gap-3 text-text-light dark:text-text-dark">
+<div class="text-primary dark:text-secondary logo-spin">
+<svg class="size-6" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold tracking-tight">DocuMind LM</h2>
+</div>
+<div class="flex flex-1 justify-end items-center gap-4">
+<button class="flex items-center justify-center rounded-lg h-10 px-4 hover:bg-gray-light dark:hover:bg-gray-dark text-text-light dark:text-text-dark header-button" onclick="window.location.href='/home'">
+<span class="material-symbols-outlined mr-2">home</span>
+<span class="text-sm font-medium">Back to Home</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-light dark:hover:bg-gray-dark text-accent dark:text-accent-dark header-button" onclick="toggleDarkMode()">
+<span class="material-symbols-outlined">dark_mode</span>
+</button>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 w-10 hover:bg-gray-light dark:hover:bg-gray-dark border border-border-light dark:border-border-dark text-text-light dark:text-text-dark header-button">
+<span class="material-symbols-outlined" style="font-size: 20px;">settings</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-border-light dark:border-border-dark avatar-bounce" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAcW2xNl9nwXeHL1D_OHPLbFA1Y7wwmeaLXMssic24VG9OW-8Yxd1WDOHB5-SWcW3uGRbtJuawFjmR_HZXRzIVIre1xrGWHpwGt9R6mu-eTdilxn8jNKEVK8cpp8maD2ea0qvmwC547W4JskowvFoUtlDYpoIOl-ycBo3fB3X4JmGqY2uGwsLzwiDHmHy_EnxKDctBpzDCRI1bNvNqBrvZxA7JSLQQ-j_hyyGSo3F8ags6t038QNzBzW3Uear4Owt_7WNu587cyor_H");'></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex flex-1 justify-center items-center py-10 px-4">
+<div class="w-full max-w-2xl animate-fadeInUp" style="animation-delay: 0.3s;">
+<!-- Logo Section -->
+<div class="text-center mb-8 animate-fadeInUp" style="animation-delay: 0.6s;">
+<div class="size-20 mx-auto mb-4 text-primary dark:text-secondary animate-pulse-custom">
+<svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h1 class="text-3xl font-bold text-text-light dark:text-text-dark mb-2">Upload Your Documents</h1>
+<p class="text-accent dark:text-accent-dark">Transform your documents with AI-powered analysis</p>
+</div>
+
+<!-- Default Empty State -->
+<div class="bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark p-6 sm:p-8 shadow-lg upload-card animate-scaleIn" id="upload-card" style="animation-delay: 0.9s;">
+<div class="flex flex-col items-center gap-6 rounded-lg border-2 border-dashed border-border-light dark:border-border-dark px-6 py-14 text-center drag-zone" id="drop-zone">
+<div class="flex items-center justify-center size-16 rounded-full bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary upload-icon">
+<span class="material-symbols-outlined" style="font-size: 32px;">upload_file</span>
+</div>
+<div class="flex max-w-[480px] flex-col items-center gap-2">
+<p class="text-lg font-bold tracking-tight text-text-light dark:text-text-dark">Upload Your Documents</p>
+<p class="text-sm font-normal text-accent dark:text-accent-dark">Drag & drop files here or click to browse</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary dark:bg-secondary text-secondary dark:text-primary text-sm font-bold tracking-wide hover:bg-accent dark:hover:bg-accent-dark transition-all duration-300 upload-button shimmer-effect" id="file-button">
+<span class="material-symbols-outlined mr-2">folder_open</span>
+<span class="truncate">Choose Files</span>
+</button>
+<p class="text-xs text-accent dark:text-accent-dark">Supports PDF, DOCX, TXT. Max 25MB per file.</p>
+</div>
+<input type="file" id="file-input" accept=".pdf,.docx,.txt" multiple class="hidden">
+</div>
+
+<!-- Uploading State -->
+<div class="mt-8 bg-card-light dark:bg-card-dark rounded-xl border border-border-light dark:border-border-dark p-6 sm:p-8 shadow-lg hidden animate-floatUp file-item" id="progress-card">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center size-12 rounded-lg bg-primary/10 dark:bg-secondary/10 text-primary dark:text-secondary animate-rotate" id="file-icon">
+<span class="material-symbols-outlined" style="font-size: 24px;">description</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-medium text-text-light dark:text-text-dark" id="file-name">Annual_Report_2023.pdf</p>
+<p class="text-xs text-accent dark:text-accent-dark" id="file-size">1.2 MB</p>
+</div>
+<button class="text-accent dark:text-accent-dark hover:text-red-500 dark:hover:text-red-400 cancel-button" id="cancel-button">
+<span class="material-symbols-outlined" style="font-size: 20px;">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between">
+<p class="text-sm font-medium text-text-light dark:text-text-dark" id="upload-status">Uploading...</p>
+<p class="text-sm font-medium text-primary dark:text-secondary" id="upload-percentage">0%</p>
+</div>
+<div class="w-full rounded-full bg-gray-light dark:bg-gray-dark h-3 overflow-hidden">
+<div class="h-full rounded-full bg-primary dark:bg-secondary progress-bar transition-all duration-300" id="progress-bar" style="width: 0%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+<script>
+let authToken = localStorage.getItem('authToken');
+let uploadInterval;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Check authentication
+    if (!authToken) {
+        alert('Please login first to upload documents');
+        window.location.href = '/login';
+        return;
+    }
+    
+    const uploadCard = document.getElementById('upload-card');
+    const progressCard = document.getElementById('progress-card');
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const fileButton = document.getElementById('file-button');
+    const fileName = document.getElementById('file-name');
+    const fileSize = document.getElementById('file-size');
+    const uploadStatus = document.getElementById('upload-status');
+    const uploadPercentage = document.getElementById('upload-percentage');
+    const progressBar = document.getElementById('progress-bar');
+    const cancelButton = document.getElementById('cancel-button');
+    const fileIcon = document.getElementById('file-icon');
+    
+    // Dark mode toggle
+    function toggleDarkMode() {
+        document.documentElement.classList.toggle('dark');
+        localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+    }
+    
+    // Initialize dark mode from localStorage
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.documentElement.classList.add('dark');
+    }
+    
+    // Make toggleDarkMode global
+    window.toggleDarkMode = toggleDarkMode;
+    
+    // File button click handler with animation
+    fileButton.addEventListener('click', () => {
+        fileButton.classList.add('animate-wiggle');
+        setTimeout(() => {
+            fileButton.classList.remove('animate-wiggle');
+        }, 500);
+        fileInput.click();
+    });
+    
+    // File input change handler
+    fileInput.addEventListener('change', handleFiles);
+    
+    // Enhanced drag and drop handlers with animations
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('drag-over');
+        const icon = dropZone.querySelector('.upload-icon');
+        icon.classList.add('animate-bounce-custom');
+    });
+    
+    dropZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        if (!dropZone.contains(e.relatedTarget)) {
+            dropZone.classList.remove('drag-over');
+            const icon = dropZone.querySelector('.upload-icon');
+            icon.classList.remove('animate-bounce-custom');
+        }
+    });
+    
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('drag-over');
+        const icon = dropZone.querySelector('.upload-icon');
+        icon.classList.remove('animate-bounce-custom');
+        icon.classList.add('success-animation');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFiles({ target: { files } });
+        }
+        
+        setTimeout(() => {
+            icon.classList.remove('success-animation');
+        }, 600);
+    });
+    
+    // Cancel upload handler with animation
+    cancelButton.addEventListener('click', () => {
+        cancelButton.classList.add('animate-rotate');
+        setTimeout(() => {
+            clearInterval(uploadInterval);
+            showUploadCard();
+            cancelButton.classList.remove('animate-rotate');
+        }, 500);
+    });
+    
+    function handleFiles(event) {
+        const files = event.target.files;
+        if (files.length > 0) {
+            const file = files[0];
+            
+            // Validate file type with animation feedback
+            const allowedTypes = ['.pdf', '.docx', '.txt'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!allowedTypes.includes(fileExtension)) {
+                showErrorAnimation();
+                alert('Please select a valid file type (PDF, DOCX, or TXT)');
+                return;
+            }
+            
+            // Validate file size (25MB limit)
+            if (file.size > 25 * 1024 * 1024) {
+                showErrorAnimation();
+                alert('File size must be less than 25MB');
+                return;
+            }
+            
+            startUpload(file);
+        }
+    }
+    
+    function showErrorAnimation() {
+        const uploadIcon = document.querySelector('.upload-icon');
+        uploadIcon.style.color = '#ef4444';
+        uploadIcon.classList.add('animate-wiggle');
+        
+        setTimeout(() => {
+            uploadIcon.style.color = '';
+            uploadIcon.classList.remove('animate-wiggle');
+        }, 1000);
+    }
+    
+    async function startUpload(file) {
+        // Update file info
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        
+        // Show progress card with smooth animation
+        uploadCard.style.animation = 'fadeInUp 0.5s ease-out reverse';
+        setTimeout(() => {
+            uploadCard.style.display = 'none';
+            progressCard.classList.remove('hidden');
+            progressCard.style.display = 'block';
+            progressCard.classList.add('animate-floatUp');
+        }, 500);
+        
+        // Reset progress with animation
+        uploadPercentage.textContent = '0%';
+        progressBar.style.width = '0%';
+        uploadStatus.textContent = 'Uploading...';
+        
+        // Stop file icon rotation and start upload animation
+        setTimeout(() => {
+            fileIcon.classList.remove('animate-rotate');
+            fileIcon.innerHTML = '<span class="material-symbols-outlined animate-pulse-custom" style="font-size: 24px;">cloud_upload</span>';
+        }, 1000);
+        
+        // Perform actual upload
+        try {
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            const xhr = new XMLHttpRequest();
+            
+            // Progress tracking
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const percentComplete = (e.loaded / e.total) * 100;
+                    uploadPercentage.textContent = Math.round(percentComplete) + '%';
+                    progressBar.style.width = percentComplete + '%';
+                    
+                    // Update status text based on progress
+                    if (percentComplete > 25 && percentComplete < 30) {
+                        uploadStatus.textContent = 'Processing document...';
+                    } else if (percentComplete > 50 && percentComplete < 55) {
+                        uploadStatus.textContent = 'Analyzing content...';
+                    } else if (percentComplete > 75 && percentComplete < 80) {
+                        uploadStatus.textContent = 'Finalizing upload...';
+                    }
+                }
+            });
+            
+            // Load complete
+            xhr.addEventListener('load', async () => {
+                if (xhr.status === 200) {
+                    const result = JSON.parse(xhr.responseText);
+                    
+                    uploadPercentage.textContent = '100%';
+                    progressBar.style.width = '100%';
+                    uploadStatus.textContent = 'Upload complete!';
+                    
+                    // Success animation
+                    fileIcon.innerHTML = '<span class="material-symbols-outlined success-animation" style="font-size: 24px; color: #10b981;">check_circle</span>';
+                    progressCard.classList.add('success-animation');
+                    
+                    // Create session with uploaded document
+                    await createSessionWithDocument(result.file_id, file.name);
+                    
+                } else {
+                    throw new Error('Upload failed');
+                }
+            });
+            
+            // Error handling
+            xhr.addEventListener('error', () => {
+                throw new Error('Upload failed');
+            });
+            
+            xhr.open('POST', '/api/v1/upload-pdf');
+            xhr.setRequestHeader('Authorization', `Bearer ${authToken}`);
+            xhr.send(formData);
+            
+        } catch (error) {
+            console.error('[UPLOAD] Error:', error);
+            alert('Failed to upload PDF. Please try again.');
+            showUploadCard();
+        }
+    }
+    
+    async function createSessionWithDocument(fileId, filename) {
+        try {
+            const title = `Chat - ${filename.replace('.pdf', '')} - ${new Date().toLocaleDateString()}`;
+            
+            const response = await fetch('/api/v1/sessions/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authToken}`
+                },
+                body: JSON.stringify({
+                    title: title,
+                    document_id: fileId,
+                    document_url: null
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                console.log('[SESSION] Session created successfully');
+                
+                // Redirect to home page after delay
+                setTimeout(() => {
+                    progressCard.style.animation = 'scaleIn 0.6s ease-out reverse';
+                    setTimeout(() => {
+                        window.location.href = '/home';
+                    }, 600);
+                }, 1500);
+            } else {
+                throw new Error(data.detail || 'Failed to create session');
+            }
+        } catch (error) {
+            console.error('[SESSION] Error:', error);
+            alert('Document uploaded but failed to create session. Please try again from home.');
+            setTimeout(() => {
+                window.location.href = '/home';
+            }, 2000);
+        }
+    }
+    
+    function showUploadCard() {
+        progressCard.style.animation = 'floatUp 0.5s ease-out reverse';
+        setTimeout(() => {
+            progressCard.classList.add('hidden');
+            uploadCard.style.display = 'block';
+            uploadCard.style.animation = 'fadeInUp 0.5s ease-out';
+            fileInput.value = '';
+        }, 500);
+    }
+    
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    // Add interactive effects to existing buttons
+    const buttons = document.querySelectorAll('.header-button, .upload-button');
+    buttons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.classList.add('shimmer-effect');
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.classList.remove('shimmer-effect');
+        });
+    });
+    
+    // Add click animation to logo
+    const logo = document.querySelector('.logo-spin');
+    logo.addEventListener('click', function() {
+        this.classList.add('animate-rotate');
+        setTimeout(() => {
+            this.classList.remove('animate-rotate');
+        }, 2000);
+    });
+});
+</script>
+</body>
+</html>

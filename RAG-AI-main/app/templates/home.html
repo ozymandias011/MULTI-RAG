@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DocuMind LM - Document Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+        
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blinkCursor {
+            0%, 50% { border-right-color: transparent; }
+            51%, 100% { border-right-color: currentColor; }
+        }
+        
+        @keyframes bounceAvatar {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+        
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+        
+        @keyframes messageTypewriter {
+            from { 
+                width: 0; 
+                opacity: 0.7;
+            }
+            to { 
+                width: 100%; 
+                opacity: 1;
+            }
+        }
+        
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(10deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1) rotate(-5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+            }
+        }
+        
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+        
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes textReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes avatarPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+            }
+        }
+        
+        @keyframes messageSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px) rotateX(90deg);
+            }
+            50% {
+                opacity: 0.8;
+                transform: translateY(-5px) rotateX(45deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+        
+        .animate-pulse-dot-1 { animation: pulse-dot 1.4s infinite; animation-delay: 0s; }
+        .animate-pulse-dot-2 { animation: pulse-dot 1.4s infinite; animation-delay: 0.2s; }
+        .animate-pulse-dot-3 { animation: pulse-dot 1.4s infinite; animation-delay: 0.4s; }
+        .animate-fadeInUp { animation: fadeInUp 0.8s ease-out; }
+        .animate-slideInLeft { animation: slideInLeft 0.6s ease-out; }
+        .animate-slideInRight { animation: slideInRight 0.6s ease-out; }
+        .animate-typewriter { overflow: hidden; border-right: 2px solid; white-space: nowrap; animation: typewriter 2s steps(40) 1s forwards, blinkCursor 1s infinite; width: 0; }
+        .animate-bounceAvatar { animation: bounceAvatar 1.5s ease-in-out; }
+        .animate-slideInFromLeft { animation: slideInFromLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .animate-slideInFromRight { animation: slideInFromRight 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .animate-messageTypewriter { overflow: hidden; animation: messageTypewriter 1.5s steps(30) forwards; width: 0; display: inline-block; }
+        .animate-popIn { animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+        .animate-wiggle { animation: wiggle 0.5s ease-in-out; }
+        .animate-floatUp { animation: floatUp 0.7s ease-out; }
+        .animate-textReveal { animation: textReveal 0.6s ease-out; }
+        .animate-avatarPulse { animation: avatarPulse 2s infinite; }
+        .animate-messageSlideIn { animation: messageSlideIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .message-fade-in { animation: fadeInUp 0.5s ease-out; }
+        
+        .chat-bubble {
+            transition: all 0.3s ease;
+        }
+        
+        .chat-bubble:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .dark .chat-bubble:hover {
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+        }
+        
+        .upload-button {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .upload-button:hover::before {
+            left: 100%;
+        }
+        
+        .message-container {
+            perspective: 1000px;
+        }
+        
+        .chat-bubble {
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform-origin: bottom left;
+        }
+        
+        .chat-bubble.ai-message {
+            transform-origin: bottom left;
+        }
+        
+        .chat-bubble.user-message {
+            transform-origin: bottom right;
+        }
+        
+        .chat-bubble:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark .chat-bubble:hover {
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
+        }
+        
+        .avatar-container {
+            transition: all 0.3s ease;
+        }
+        
+        .avatar-container:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .typing-indicator {
+            animation: floatUp 0.6s ease-out;
+        }
+        
+        .input-area {
+            transition: all 0.3s ease;
+        }
+        
+        .input-area:focus-within {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .input-area:focus-within {
+            box-shadow: 0 15px 35px rgba(255, 255, 255, 0.05);
+        }
+        
+        .summarize-button {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .summarize-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .summarize-button:hover::before {
+            left: 100%;
+        }
+        
+        .summarize-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dark .summarize-button:hover {
+            box-shadow: 0 12px 25px rgba(255, 255, 255, 0.15);
+        }
+        
+        .summarize-button:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        
+        .summarize-button.loading {
+            animation: pulse 1.5s infinite;
+        }
+        
+        .summarize-button.loading .material-symbols-outlined {
+            animation: rotate 1s linear infinite;
+        }
+        
+        @keyframes summarizeSuccess {
+            0% {
+                background-color: var(--bg-color);
+            }
+            50% {
+                background-color: #10b981;
+                transform: scale(1.1);
+            }
+            100% {
+                background-color: var(--bg-color);
+                transform: scale(1);
+            }
+        }
+        
+        .summarize-button.success {
+            animation: summarizeSuccess 0.8s ease-out;
+        }
+        
+        .chat-history-tab {
+            transition: all 0.3s ease;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .chat-history-tab:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            transform: translateX(5px);
+        }
+        
+        .dark .chat-history-tab:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .chat-history-tab.active {
+            background-color: rgba(0, 0, 0, 0.1);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .dark .chat-history-tab.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--secondary);
+        }
+        
+        .chat-history-container {
+            max-height: calc(100vh - 300px);
+            overflow-y: auto;
+        }
+        
+        .chat-history-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-history-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .chat-history-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+        
+        .dark .chat-history-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .ai-brain-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .dark .ai-brain-icon {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        .settings-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 50;
+            margin-top: 8px;
+            width: 320px;
+            background: var(--card-light);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .dark .settings-dropdown {
+            background: var(--card-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 10px 40px rgba(255, 255, 255, 0.1);
+        }
+        
+        .settings-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        
+        .settings-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-radius: 8px;
+            margin: 4px 8px;
+        }
+        
+        .dark .settings-item {
+            color: var(--text-dark);
+        }
+        
+        .settings-item:hover {
+            background: var(--gray-light);
+            transform: translateX(4px);
+        }
+        
+        .dark .settings-item:hover {
+            background: var(--gray-dark);
+        }
+        
+        .settings-section {
+            padding: 8px 0;
+        }
+        
+        .settings-section:not(:last-child) {
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .dark .settings-section:not(:last-child) {
+            border-bottom-color: var(--border-dark);
+        }
+        
+        .settings-header {
+            padding: 12px 16px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--accent);
+        }
+        
+        .dark .settings-header {
+            color: var(--accent-dark);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 44px;
+            height: 24px;
+            background: var(--gray-light);
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .dark .toggle-switch {
+            background: var(--gray-dark);
+        }
+        
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+        
+        .dark .toggle-switch.active {
+            background: var(--secondary);
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(20px);
+        }
+        
+        .dark .toggle-switch::after {
+            background: var(--card-dark);
+        }
+        
+        .profile-button {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .profile-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .profile-button:hover {
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .message-text h1, .message-text h2, .message-text h3 {
+            margin-top: 16px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .message-text p {
+            margin-bottom: 12px;
+        }
+        
+        .message-text ul, .message-text ol {
+            margin-left: 24px;
+            margin-bottom: 12px;
+        }
+        
+        .message-text li {
+            margin-bottom: 6px;
+        }
+        
+        .message-text strong {
+            font-weight: 600;
+        }
+        
+        .message-text code {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .message-text pre {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        
+        .message-text pre code {
+            background: none;
+            padding: 0;
+            color: #d4d4d4;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "secondary": "#ffffff",
+                        "background-light": "#ffffff",
+                        "background-dark": "#000000", 
+                        "text-light": "#000000",
+                        "text-dark": "#ffffff",
+                        "border-light": "#000000",
+                        "border-dark": "#ffffff",
+                        "card-light": "#ffffff",
+                        "card-dark": "#000000",
+                        "gray-light": "#f5f5f5",
+                        "gray-dark": "#1a1a1a",
+                        "accent": "#333333",
+                        "accent-dark": "#cccccc",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark transition-colors duration-500">
+<div class="relative flex h-screen w-full flex-col group/design-root overflow-hidden">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark px-6 py-3 shrink-0 animate-slideInLeft">
+<div class="flex items-center gap-3 text-text-light dark:text-text-dark">
+<div class="size-6 text-primary dark:text-secondary transform hover:rotate-180 transition-transform duration-500">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">DocuMind LM</h2>
+</div>
+<div class="flex flex-1 justify-end gap-2 relative">
+<button class="flex items-center justify-center rounded-lg h-10 px-4 hover:bg-gray-light dark:hover:bg-gray-dark text-text-light dark:text-text-dark transition-all duration-200 hover:scale-105" id="login-register-button">
+<span class="material-symbols-outlined mr-2">person</span>
+<span class="text-sm font-medium">Login/Register</span>
+</button>
+<button class="flex items-center justify-center rounded-lg h-10 px-4 hover:bg-gray-light dark:hover:bg-gray-dark text-text-light dark:text-text-dark transition-all duration-200 hover:scale-105 upload-button" id="upload-button">
+<span class="material-symbols-outlined mr-2">upload_file</span>
+<span class="text-sm font-medium">Upload New Document</span>
+</button>
+<div class="relative">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 hover:bg-gray-light dark:hover:bg-gray-dark text-accent dark:text-accent-dark transition-all duration-200 hover:scale-105" id="settings-button">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="settings-dropdown" id="settings-dropdown">
+<div class="settings-section">
+<div class="settings-header">General</div>
+<a href="Profile.html" class="settings-item">
+<span class="material-symbols-outlined">account_circle</span>
+<span>Profile</span>
+</a>
+<div class="settings-item" onclick="window.toggleNotifications()">
+<span class="material-symbols-outlined">notifications</span>
+<span>Notifications</span>
+<div class="toggle-switch" id="notifications-toggle"></div>
+</div>
+<div class="settings-item" onclick="window.openLanguageSettings()">
+<span class="material-symbols-outlined">language</span>
+<span>Language</span>
+<span class="text-xs text-accent dark:text-accent-dark ml-auto">English</span>
+</div>
+</div>
+<div class="settings-section">
+<div class="settings-header">Appearance</div>
+<div class="settings-item" onclick="window.toggleDarkMode()">
+<span class="material-symbols-outlined">palette</span>
+<span>Dark Mode</span>
+<div class="toggle-switch" id="theme-toggle"></div>
+</div>
+<div class="settings-item" onclick="window.adjustFontSize()">
+<span class="material-symbols-outlined">text_fields</span>
+<span>Font Size</span>
+<span class="text-xs text-accent dark:text-accent-dark ml-auto">Medium</span>
+</div>
+</div>
+<div class="settings-section">
+<div class="settings-header">Document Analysis</div>
+<div class="settings-item" onclick="window.toggleAutoSave()">
+<span class="material-symbols-outlined">save</span>
+<span>Auto-save</span>
+<div class="toggle-switch active" id="autosave-toggle"></div>
+</div>
+<div class="settings-item" onclick="window.toggleAIMode()">
+<span class="material-symbols-outlined">psychology</span>
+<span>Advanced AI Mode</span>
+<div class="toggle-switch active" id="ai-mode-toggle"></div>
+</div>
+</div>
+<div class="settings-section">
+<div class="settings-header">Account</div>
+<a href="/login" class="settings-item" id="settings-login-link">
+<span class="material-symbols-outlined">login</span>
+<span>Login/Register</span>
+</a>
+<div class="settings-item" onclick="window.logout()" style="color: #ef4444; display: none;" id="settings-logout-btn">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-border-light dark:border-border-dark transition-transform duration-200 hover:scale-110 profile-button" id="profile-avatar" data-alt="User profile picture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDIQi_baiAawXCTu4v3UdK89rmORPTxV9F5CVAAiYaYOFBbGqmP9TrjhbzPdbOQ23UzzLMGcb9lyebKMjNzV3B034F4elx7lSyeSSfXtRbVCGm0dq2hNPNLL8jM8dhubtZrK02POo0h1yBfUukn5EoIB09mJV0JWGl3A2XrR_F9d8QosiLX1qxlpQTJgpaeL_jPEpPlaukNwQai4SlPU2x7Sv7crOcv-ZznkNH7-v0LxAdiIgLPQt2fjCW4wm2oAzqcKHc6tR-B3bTB");' onclick="window.location.href='Profile.html'"></div>
+</div>
+</div>
+</header>
+<main class="flex h-full grow overflow-hidden">
+<aside class="w-[380px] shrink-0 border-r border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark p-6 flex flex-col gap-6 animate-slideInLeft">
+<div class="flex min-w-72 flex-col gap-2">
+<p class="text-2xl font-bold leading-tight tracking-[-0.03em] text-text-light dark:text-text-dark animate-typewriter" id="document-title">Annual Report 2023</p>
+<p class="text-sm font-normal leading-normal text-accent dark:text-accent-dark animate-fadeInUp" style="animation-delay: 2.5s;" id="document-filename">Q4_report_final.pdf</p>
+</div>
+<div class="flex flex-col gap-3 rounded-lg border border-border-light dark:border-border-dark p-4 bg-gray-light dark:bg-gray-dark h-full animate-fadeInUp" style="animation-delay: 3s;">
+<h3 class="text-base font-semibold text-text-light dark:text-text-dark mb-2">Chat History</h3>
+<div class="chat-history-container flex flex-col gap-2" id="sessions-list">
+</div>
+</div>
+</aside>
+<div class="flex flex-1 flex-col overflow-y-auto animate-slideInRight">
+<div class="sticky top-0 bg-background-light dark:bg-background-dark border-b border-border-light dark:border-border-dark p-4 flex justify-between items-center animate-slideInRight" style="animation-delay: 0.2s;">
+<h2 class="text-lg font-semibold text-text-light dark:text-text-dark">Document Analysis</h2>
+<button class="flex items-center justify-center gap-2 px-4 py-2 bg-primary dark:bg-secondary text-secondary dark:text-primary rounded-lg hover:bg-accent dark:hover:bg-accent-dark transition-all duration-300 hover:scale-105 hover:shadow-lg summarize-button" id="summarize-button" style="display: none;">
+<span class="material-symbols-outlined" style="font-size: 18px;">summarize</span>
+<span class="text-sm font-medium">Summarize</span>
+</button>
+</div>
+<div class="flex-grow p-6 space-y-6" id="chat-container">
+</div>
+<div class="sticky bottom-0 bg-gradient-to-t from-background-light dark:from-background-dark to-transparent px-6 pb-6 pt-4 animate-fadeInUp input-area" style="animation-delay: 5.5s; display: none;" id="input-area-wrapper">
+<div class="relative">
+<textarea class="w-full resize-none rounded-xl border border-border-light dark:border-border-dark bg-card-light dark:bg-card-dark py-3 pl-4 pr-14 text-base text-text-light dark:text-text-dark placeholder:text-accent dark:placeholder:text-accent-dark focus:ring-2 focus:ring-primary dark:focus:ring-secondary focus:border-primary dark:focus:border-secondary transition-all duration-300 shadow-sm" placeholder="Ask a question about your document..." rows="1" style="overflow-y: hidden;" id="chat-input"></textarea>
+<button class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center justify-center size-8 rounded-lg bg-primary dark:bg-secondary text-secondary dark:text-primary hover:bg-accent dark:hover:bg-accent-dark transition-all duration-200 hover:scale-110 animate-wiggle" id="send-button" style="animation-delay: 6s;">
+<span class="material-symbols-outlined" style="font-size: 20px;">arrow_upward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<script>
+let currentUser = null;
+let currentSession = null;
+let authToken = localStorage.getItem('authToken');
+let messageCounter = 0;
+
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('[INIT] Application starting...');
+    
+    if (typeof marked !== 'undefined') {
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            highlight: function(code, lang) {
+                if (typeof hljs !== 'undefined' && lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(code, { language: lang }).value;
+                    } catch (err) {}
+                }
+                return code;
+            }
+        });
+    }
+    
+    await checkAuth();
+    initializeEventListeners();
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('theme-toggle').classList.add('active');
+    }
+    
+    initializeSettings();
+});
+
+async function checkAuth() {
+    if (!authToken) {
+        showLoginButton();
+        showWelcomeMessage();
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/v1/auth/me', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            currentUser = data.user;
+            console.log('[AUTH] User authenticated:', currentUser.username);
+            showUserInfo();
+            await loadSessions();
+        } else {
+            localStorage.removeItem('authToken');
+            authToken = null;
+            showLoginButton();
+            showWelcomeMessage();
+        }
+    } catch (error) {
+        console.error('[AUTH] Error:', error);
+        showLoginButton();
+        showWelcomeMessage();
+    }
+}
+
+function showLoginButton() {
+    document.getElementById('login-register-button').querySelector('span:last-child').textContent = 'Login/Register';
+    document.getElementById('settings-login-link').style.display = 'flex';
+    document.getElementById('settings-logout-btn').style.display = 'none';
+}
+
+function showUserInfo() {
+    document.getElementById('login-register-button').querySelector('span:last-child').textContent = currentUser.username;
+    document.getElementById('settings-login-link').style.display = 'none';
+    document.getElementById('settings-logout-btn').style.display = 'flex';
+}
+
+function showWelcomeMessage() {
+    const container = document.getElementById('chat-container');
+    container.innerHTML = `
+        <div class="flex items-end gap-3 message-container animate-slideInFromLeft">
+            <div class="avatar-container bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 shrink-0 bg-gray-light dark:bg-gray-dark p-1.5 border border-border-light dark:border-border-dark animate-avatarPulse ai-brain-icon">
+                <svg class="text-text-light dark:text-text-dark" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C13.1 2 14 2.9 14 4C14 4.74 13.6 5.39 13 5.73C13.6 6.27 14 7.1 14 8C14 8.37 13.93 8.72 13.82 9.05C14.32 9.18 14.85 9.25 15.4 9.25C17.5 9.25 19.25 7.5 19.25 5.4C19.25 4.2 18.8 3.1 18 2.3C17.2 1.5 16.1 1.05 14.9 1.05C13.85 1.05 12.9 1.4 12.15 1.95C11.4 1.4 10.45 1.05 9.4 1.05C8.2 1.05 7.1 1.5 6.3 2.3C5.5 3.1 5.05 4.2 5.05 5.4C5.05 7.5 6.8 9.25 8.9 9.25C9.45 9.25 9.98 9.18 10.48 9.05C10.37 8.72 10.3 8.37 10.3 8C10.3 7.1 10.7 6.27 11.3 5.73C10.7 5.39 10.3 4.74 10.3 4C10.3 2.9 11.2 2 12.3 2H12Z" fill="currentColor"/>
+                    <path d="M12 8C13.66 8 15 9.34 15 11C15 11.53 14.86 12.03 14.61 12.46L16.18 14.03C17.34 12.87 18 11.29 18 9.6V9C18 7.9 17.1 7 16 7H15.4C14.63 7 14 6.37 14 5.6V5C14 3.9 13.1 3 12 3S10 3.9 10 5V5.6C10 6.37 9.37 7 8.6 7H8C6.9 7 6 7.9 6 9V9.6C6 11.29 6.66 12.87 7.82 14.03L9.39 12.46C9.14 12.03 9 11.53 9 11C9 9.34 10.34 8 12 8Z" fill="currentColor"/>
+                    <path d="M12 13C10.9 13 10 13.9 10 15S10.9 17 12 17S14 16.1 14 15S13.1 13 12 13Z" fill="currentColor"/>
+                    <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                    <circle cx="16" cy="12" r="1.5" fill="currentColor"/>
+                    <path d="M6 15C6 16.66 7.34 18 9 18H15C16.66 18 18 16.66 18 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                </svg>
+            </div>
+            <div class="flex flex-1 flex-col gap-1 items-start">
+                <p class="text-accent dark:text-accent-dark text-sm font-medium leading-normal max-w-[500px] animate-textReveal" style="animation-delay: 0.5s;">DocuMind LM</p>
+                <div class="text-base font-normal leading-relaxed flex max-w-[500px] rounded-2xl px-4 py-3 bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark shadow-sm border border-border-light dark:border-border-dark chat-bubble ai-message animate-popIn" style="animation-delay: 0.8s;">
+                    <span class="animate-messageTypewriter" style="animation-delay: 1.2s;">Welcome! ${authToken ? 'Upload a document to get started with AI-powered analysis.' : 'Please login and upload a document to get started.'}</span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function initializeEventListeners() {
+    document.getElementById('upload-button').addEventListener('click', () => {
+        if (!authToken) {
+            alert('Please login first to upload documents');
+            window.location.href = '/login';
+            return;
+        }
+        window.location.href = '/upload';
+    });
+    
+    document.getElementById('login-register-button').addEventListener('click', () => {
+        if (authToken) {
+            if (confirm('Logout?')) {
+                window.logout();
+            }
+        } else {
+            window.location.href = '/login';
+        }
+    });
+    
+    document.getElementById('settings-button').addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('settings-dropdown').classList.toggle('active');
+    });
+    
+    document.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('settings-dropdown');
+        const settingsBtn = document.getElementById('settings-button');
+        if (!dropdown.contains(e.target) && !settingsBtn.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+    
+    const chatInput = document.getElementById('chat-input');
+    chatInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+    
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    document.getElementById('send-button').addEventListener('click', sendMessage);
+    document.getElementById('summarize-button').addEventListener('click', summarizeDocument);
+}
+
+async function loadSessions() {
+    try {
+        const response = await fetch('/api/v1/sessions/list', {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            renderSessions(data.sessions);
+        }
+    } catch (error) {
+        console.error('[SESSIONS] Error loading:', error);
+    }
+}
+
+function renderSessions(sessions) {
+    const container = document.getElementById('sessions-list');
+    
+    if (sessions.length === 0) {
+        container.innerHTML = `
+            <div class="text-center text-accent dark:text-accent-dark py-8">
+                <span class="material-symbols-outlined text-4xl mb-2">chat_bubble_outline</span>
+                <p class="text-sm">No chat sessions yet</p>
+                <p class="text-xs mt-2">Upload a document to start</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = '';
+    
+    sessions.forEach(session => {
+        const isActive = currentSession && currentSession.id === session.id;
+        const div = document.createElement('div');
+        div.className = `chat-history-tab p-3 cursor-pointer ${isActive ? 'active' : ''}`;
+        
+        div.innerHTML = `
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-text-light dark:text-text-dark">${escapeHtml(session.title).substring(0, 30)}...</p>
+                    <p class="text-xs text-accent dark:text-accent-dark">${formatDate(session.updated_at)}</p>
+                </div>
+                ${isActive ? '<div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>' : '<span class="material-symbols-outlined text-accent dark:text-accent-dark" style="font-size: 16px;">description</span>'}
+            </div>
+            <p class="text-xs text-accent dark:text-accent-dark mt-1 truncate">${session.message_count} messages</p>
+        `;
+        
+        div.onclick = () => loadChatSession(session.id);
+        container.appendChild(div);
+    });
+}
+
+async function loadChatSession(sessionId) {
+    try {
+        const response = await fetch(`/api/v1/sessions/${sessionId}/messages`, {
+            headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            currentSession = data.session;
+            
+            document.getElementById('document-title').textContent = data.session.title;
+            document.getElementById('document-filename').textContent = data.session.document_id ? 'Uploaded Document' : 'URL Document';
+            
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.innerHTML = '';
+            
+            data.messages.forEach((msg, index) => {
+                setTimeout(() => {
+                    createMessage(msg.content, msg.type === 'user' ? 'user' : 'ai', msg.processing_time);
+                }, index * 300);
+            });
+            
+            document.getElementById('input-area-wrapper').style.display = 'block';
+            document.getElementById('summarize-button').style.display = 'flex';
+            
+            loadSessions();
+            
+            setTimeout(() => {
+                addInteractiveEffects();
+            }, data.messages.length * 300 + 500);
+        }
+    } catch (error) {
+        console.error('[SESSION] Error loading:', error);
+        alert('Failed to load session');
+    }
+}
+
+async function sendMessage() {
+    if (!currentSession) {
+        alert('Please upload a document and create a session first');
+        return;
+    }
+    
+    const input = document.getElementById('chat-input');
+    const question = input.value.trim();
+    
+    if (!question) return;
+    
+    console.log('[CHAT] Sending message:', question);
+    
+    createMessage(question, 'user');
+    input.value = '';
+    input.style.height = 'auto';
+    
+    showTypingIndicator();
+    
+    try {
+        const formData = new FormData();
+        formData.append('question', question);
+        formData.append('session_id', currentSession.id);
+        
+        const response = await fetch('/api/v1/chat', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${authToken}` },
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        hideTypingIndicator();
+        
+        if (data.success) {
+            createAIResponse(data.answer, data.processing_time);
+            loadSessions();
+        } else {
+            alert('Error: ' + (data.detail || 'Failed to get response'));
+        }
+    } catch (error) {
+        console.error('[CHAT] Error:', error);
+        hideTypingIndicator();
+        alert('Failed to send message');
+    }
+}
+
+function createMessage(text, sender, processingTime = null) {
+    messageCounter++;
+    const isUser = sender === 'user';
+    const messageContainer = document.createElement('div');
+    messageContainer.className = `flex items-end gap-3 message-container ${isUser ? 'justify-end animate-slideInFromRight' : 'animate-slideInFromLeft'}`;
+    
+    let messageContent = text;
+    if (!isUser && typeof marked !== 'undefined') {
+        try {
+            messageContent = marked.parse(text);
+        } catch (e) {
+            messageContent = escapeHtml(text);
+        }
+    } else {
+        messageContent = escapeHtml(text);
+    }
+    
+    const messageHTML = `
+        ${!isUser ? `
+        <div class="avatar-container bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 shrink-0 bg-gray-light dark:bg-gray-dark p-1.5 border border-border-light dark:border-border-dark animate-bounceAvatar ai-brain-icon">
+            <svg class="text-text-light dark:text-text-dark" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C13.1 2 14 2.9 14 4C14 4.74 13.6 5.39 13 5.73C13.6 6.27 14 7.1 14 8C14 8.37 13.93 8.72 13.82 9.05C14.32 9.18 14.85 9.25 15.4 9.25C17.5 9.25 19.25 7.5 19.25 5.4C19.25 4.2 18.8 3.1 18 2.3C17.2 1.5 16.1 1.05 14.9 1.05C13.85 1.05 12.9 1.4 12.15 1.95C11.4 1.4 10.45 1.05 9.4 1.05C8.2 1.05 7.1 1.5 6.3 2.3C5.5 3.1 5.05 4.2 5.05 5.4C5.05 7.5 6.8 9.25 8.9 9.25C9.45 9.25 9.98 9.18 10.48 9.05C10.37 8.72 10.3 8.37 10.3 8C10.3 7.1 10.7 6.27 11.3 5.73C10.7 5.39 10.3 4.74 10.3 4C10.3 2.9 11.2 2 12.3 2H12Z" fill="currentColor"/>
+                <path d="M12 8C13.66 8 15 9.34 15 11C15 11.53 14.86 12.03 14.61 12.46L16.18 14.03C17.34 12.87 18 11.29 18 9.6V9C18 7.9 17.1 7 16 7H15.4C14.63 7 14 6.37 14 5.6V5C14 3.9 13.1 3 12 3S10 3.9 10 5V5.6C10 6.37 9.37 7 8.6 7H8C6.9 7 6 7.9 6 9V9.6C6 11.29 6.66 12.87 7.82 14.03L9.39 12.46C9.14 12.03 9 11.53 9 11C9 9.34 10.34 8 12 8Z" fill="currentColor"/>
+                <path d="M12 13C10.9 13 10 13.9 10 15S10.9 17 12 17S14 16.1 14 15S13.1 13 12 13Z" fill="currentColor"/>
+                <circle cx="8" cy="12" r="1.5" fill="currentColor"/>
+                <circle cx="16" cy="12" r="1.5" fill="currentColor"/>
+                <path d="M6 15C6 16.66 7.34 18 9 18H15C16.66 18 18 16.66 18 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+            </svg>
+        </div>` : ''}
+        <div class="flex flex-1 flex-col gap-1 items-${isUser ? 'end' : 'start'}">
+            <p class="text-accent dark:text-accent-dark text-sm font-medium leading-normal max-w-[500px] ${isUser ? 'text-right' : ''} animate-textReveal" style="animation-delay: 0.3s;">${isUser ? 'You' : 'DocuMind LM'}</p>
+            <div class="message-text text-base font-normal leading-relaxed flex max-w-[500px] rounded-2xl ${isUser ? 'rounded-br-none' : 'rounded-bl-none'} px-4 py-3 ${isUser ? 'bg-primary dark:bg-secondary text-secondary dark:text-primary' : 'bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark border border-border-light dark:border-border-dark'} shadow-sm chat-bubble ${isUser ? 'user-message' : 'ai-message'} animate-popIn" style="animation-delay: 0.6s;">
+                <span class="animate-messageTypewriter" style="animation-delay: 0.9s;">${messageContent}</span>
+            </div>
+            ${processingTime ? `<p class="text-xs text-accent dark:text-accent-dark mt-1"><span class="material-symbols-outlined" style="font-size: 12px; vertical-align: middle;">bolt</span> ${processingTime}</p>` : ''}
+        </div>
+        ${isUser ? `
+        <div class="avatar-container bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 shrink-0 border border-border-light dark:border-border-dark animate-bounceAvatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB6spxxfDAx5JAit8nNuZNJFIY0ihhccjbUnp83VDZByCEGCZmTYDzFybZkyKEfLrju8h2AiY8XL7tshA0p2wLNPBs3Y8T809eYRipz7o1ZpDheQV1TFQthVSPJngjho1LgIL7SFEE3h67T8SAGLsvB7SAlfh4BZ43Q_PG0JhJArJT1meWePUHyDXf2IKbEynbFWDoNT1f1aofuADCKhR9aPnogRoN53OFRqEWFNQPvcgWPBb8g3xcEf3IXDtNv3M4dspNW1kZxcfex');"></div>` : ''}
+    `;
+    
+    messageContainer.innerHTML = messageHTML;
+    
+    const existingTyping = document.getElementById('chat-container').querySelector('.typing-message');
+    if (existingTyping) {
+        existingTyping.remove();
+    }
+    
+    document.getElementById('chat-container').appendChild(messageContainer);
+    
+    if (!isUser && typeof hljs !== 'undefined') {
+        messageContainer.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block);
+        });
+    }
+    
+    setTimeout(() => {
+        document.querySelector('.flex-grow').scrollTop = document.querySelector('.flex-grow').scrollHeight;
+    }, 100);
+}
+
+function createAIResponse(text, processingTime) {
+    createMessage(text, 'ai', processingTime);
+}
+
+function showTypingIndicator() {
+    const typingContainer = document.createElement('div');
+    typingContainer.className = 'flex items-end gap-3 message-container animate-slideInFromLeft typing-message';
+    
+    typingContainer.innerHTML = `
+        <div class="avatar-container bg-center bg-no-repeat aspect-square bg-cover rounded-full w-8 shrink-0 bg-gray-light dark:bg-gray-dark p-1.5 border border-border-light dark:border-border-dark animate-wiggle ai-brain-icon">
+            <svg class="text-text-light dark:text-text-dark" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2C13.1 2 14 2.9 14 4C14 4.74 13.6 5.39 13 5.73C13.6 6.27 14 7.1 14 8C14 8.37 13.93 8.72 13.82 9.05C14.32 9.18 14.85 9.25 15.4 9.25C17.5 9.25 19.25 7.5 19.25 5.4C19.25 4.2 18.8 3.1 18 2.3C17.2 1.5 16.1 1.05 14.9 1.05C13.85 1.05 12.9 1.4 12.15 1.95C11.4 1.4 10.45 1.05 9.4 1.05C8.2 1.05 7.1 1.5 6.3 2.3C5.5 3.1 5.05 4.2 5.05 5.4C5.05 7.5 6.8 9.25 8.9 9.25C9.45 9.25 9.98 9.18 10.48 9.05C10.37 8.72 10.3 8.37 10.3 8C10.3 7.1 10.7 6.27 11.3 5.73C10.7 5.39 10.3 4.74 10.3 4C10.3 2.9 11.2 2 12.3 2H12Z" fill="currentColor"/>
+            </svg>
+        </div>
+        <div class="flex flex-1 flex-col gap-1 items-start">
+            <p class="text-accent dark:text-accent-dark text-sm font-medium leading-normal max-w-[500px] animate-textReveal">DocuMind LM</p>
+            <div class="flex max-w-[500px] rounded-2xl rounded-bl-none px-4 py-3 bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark shadow-sm border border-border-light dark:border-border-dark chat-bubble ai-message typing-indicator animate-floatUp">
+                <div class="flex items-center space-x-1">
+                    <div class="size-2 bg-accent dark:bg-accent-dark rounded-full animate-pulse-dot-1"></div>
+                    <div class="size-2 bg-accent dark:bg-accent-dark rounded-full animate-pulse-dot-2"></div>
+                    <div class="size-2 bg-accent dark:bg-accent-dark rounded-full animate-pulse-dot-3"></div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('chat-container').appendChild(typingContainer);
+    setTimeout(() => {
+        document.querySelector('.flex-grow').scrollTop = document.querySelector('.flex-grow').scrollHeight;
+    }, 100);
+}
+
+function hideTypingIndicator() {
+    const typingMessage = document.querySelector('.typing-message');
+    if (typingMessage) {
+        typingMessage.style.animation = 'fadeInUp 0.3s ease-out reverse';
+        setTimeout(() => {
+            typingMessage.remove();
+        }, 300);
+    }
+}
+
+async function summarizeDocument() {
+    if (!currentSession) return;
+    
+    const button = document.getElementById('summarize-button');
+    button.classList.add('loading');
+    button.disabled = true;
+    
+    const originalText = button.querySelector('span:last-child').textContent;
+    button.querySelector('span:last-child').textContent = 'Summarizing...';
+    
+    try {
+        const formData = new FormData();
+        formData.append('session_id', currentSession.id);
+        
+        const response = await fetch('/api/v1/summarize', {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${authToken}` },
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            button.classList.remove('loading');
+            button.classList.add('success');
+            button.querySelector('span:last-child').textContent = 'Complete!';
+            
+            createMessage(data.summary, 'ai', data.processing_time);
+            
+            setTimeout(() => {
+                button.classList.remove('success');
+                button.querySelector('span:last-child').textContent = originalText;
+                button.disabled = false;
+            }, 2000);
+        }
+    } catch (error) {
+        console.error('[SUMMARIZE] Error:', error);
+        button.classList.remove('loading');
+        button.querySelector('span:last-child').textContent = originalText;
+        button.disabled = false;
+    }
+}
+
+function addInteractiveEffects() {
+    const chatBubbles = document.querySelectorAll('.chat-bubble');
+    chatBubbles.forEach(bubble => {
+        bubble.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.02)';
+        });
+        
+        bubble.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+    
+    const avatars = document.querySelectorAll('.avatar-container');
+    avatars.forEach(avatar => {
+        avatar.addEventListener('click', function() {
+            this.classList.add('animate-wiggle');
+            setTimeout(() => {
+                this.classList.remove('animate-wiggle');
+            }, 500);
+        });
+    });
+}
+
+function initializeSettings() {
+    if (localStorage.getItem('notifications') === 'true') {
+        document.getElementById('notifications-toggle').classList.add('active');
+    }
+    
+    if (localStorage.getItem('autoSave') !== 'false') {
+        document.getElementById('autosave-toggle').classList.add('active');
+    }
+    
+    if (localStorage.getItem('aiMode') !== 'false') {
+        document.getElementById('ai-mode-toggle').classList.add('active');
+    }
+}
+
+window.toggleDarkMode = function() {
+    document.documentElement.classList.toggle('dark');
+    localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+    document.getElementById('theme-toggle').classList.toggle('active');
+}
+
+window.toggleNotifications = function() {
+    const toggle = document.getElementById('notifications-toggle');
+    toggle.classList.toggle('active');
+    localStorage.setItem('notifications', toggle.classList.contains('active'));
+}
+
+window.toggleAutoSave = function() {
+    const toggle = document.getElementById('autosave-toggle');
+    toggle.classList.toggle('active');
+    localStorage.setItem('autoSave', toggle.classList.contains('active'));
+}
+
+window.toggleAIMode = function() {
+    const toggle = document.getElementById('ai-mode-toggle');
+    toggle.classList.toggle('active');
+    localStorage.setItem('aiMode', toggle.classList.contains('active'));
+}
+
+window.adjustFontSize = function() {
+    const sizes = ['Small', 'Medium', 'Large', 'Extra Large'];
+    const currentSize = localStorage.getItem('fontSize') || 'Medium';
+    const currentIndex = sizes.indexOf(currentSize);
+    const nextIndex = (currentIndex + 1) % sizes.length;
+    const newSize = sizes[nextIndex];
+    
+    localStorage.setItem('fontSize', newSize);
+    
+    const sizeMap = {
+        'Small': '14px',
+        'Medium': '16px',
+        'Large': '18px',
+        'Extra Large': '20px'
+    };
+    
+    document.documentElement.style.fontSize = sizeMap[newSize];
+}
+
+window.openLanguageSettings = function() {
+    alert('Language settings coming soon!');
+}
+
+window.logout = function() {
+    if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('authToken');
+        authToken = null;
+        currentUser = null;
+        currentSession = null;
+        window.location.reload();
+    }
+}
+
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+    
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+</script>
+</body>
+</html>
